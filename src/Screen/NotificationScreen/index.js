@@ -1,9 +1,28 @@
 import React from 'react';
-import {ScrollView, View} from 'react-native';
+import {ActivityIndicator, ScrollView, View} from 'react-native';
 import Text from '../../Components/Text';
-import {scaleHeight, scaleWidth} from '../../Utils/helpers';
+import {useNotificationsQuery} from '../../Config/Redux/Services/profileService';
+import {getDateTime, scaleHeight, scaleWidth} from '../../Utils/helpers';
+import {PRIMARY_COLOR} from '../../Utils/contstans';
 
 const NotificationScreen = () => {
+  const {data, isLoading} = useNotificationsQuery();
+
+  const notificationItems = data?.data || [];
+
+  if (isLoading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <ActivityIndicator color={PRIMARY_COLOR} />
+      </View>
+    );
+  }
+
   return (
     <ScrollView
       style={{
@@ -12,28 +31,21 @@ const NotificationScreen = () => {
         paddingHorizontal: scaleWidth(3),
       }}>
       <View>
-        <View
-          style={{
-            marginTop: scaleHeight(2),
-            backgroundColor: '#fff',
-            paddingHorizontal: scaleWidth(3),
-            paddingVertical: scaleHeight(1),
-            borderRadius: scaleHeight(1),
-          }}>
-          <Text type={'SemiBold'}>Berhasil Mengirim Lamaran Kerja</Text>
-          <Text fontSize={10}>03 Juni 2023 - 05:20</Text>
-        </View>
-        <View
-          style={{
-            marginTop: scaleHeight(2),
-            backgroundColor: '#fff',
-            paddingHorizontal: scaleWidth(3),
-            paddingVertical: scaleHeight(1),
-            borderRadius: scaleHeight(1),
-          }}>
-          <Text type={'SemiBold'}>Berhasil Mengirim Lamaran Kerja</Text>
-          <Text fontSize={10}>03 Juni 2023 - 05:20</Text>
-        </View>
+        {notificationItems.map(item => (
+          <View
+            key={item.id}
+            style={{
+              marginTop: scaleHeight(2),
+              backgroundColor: '#fff',
+              paddingHorizontal: scaleWidth(3),
+              paddingVertical: scaleHeight(1),
+              borderRadius: scaleHeight(1),
+            }}>
+            <Text type={'SemiBold'}>{item.name}</Text>
+            <Text fontSize={10}>{item.description}</Text>
+            <Text fontSize={10}>{getDateTime(item?.created_at)}</Text>
+          </View>
+        ))}
       </View>
     </ScrollView>
   );

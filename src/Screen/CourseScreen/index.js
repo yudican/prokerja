@@ -1,12 +1,10 @@
 import React from 'react';
-import {FlatList, Image, ScrollView, View} from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useDispatch, useSelector} from 'react-redux';
-import MainLayout from '../../Components/Layout/MainLayout';
-import Text from '../../Components/Text';
-import {PRIMARY_COLOR} from '../../Utils/contstans';
-import {scaleFont, scaleHeight, scaleWidth} from '../../Utils/helpers';
+import {ActivityIndicator, FlatList, ScrollView, View} from 'react-native';
 import CourseCard from '../../Components/Card/CourseCard';
+import MainLayout from '../../Components/Layout/MainLayout';
+import {useGetCourseQuery} from '../../Config/Redux/Services/courseService';
+import Text from '../../Components/Text';
+import {scaleHeight, scaleWidth} from '../../Utils/helpers';
 
 const courses = [
   {
@@ -26,16 +24,27 @@ const courses = [
 ];
 
 const CourseScreen = ({navigation}) => {
-  const dispatch = useDispatch();
-  const {userData} = useSelector(state => state.user);
+  const {data: courseData, isLoading: courseLoading} = useGetCourseQuery();
+  const courseItems = courseLoading ? [] : courseData?.data || [];
   return (
     <MainLayout>
       {/* profile item */}
       <ScrollView>
         {/* Course Item */}
+
         <FlatList
+          scrollEnabled={false}
           showsVerticalScrollIndicator={false}
-          data={courses}
+          data={courseItems.map(item => {
+            return {
+              id: item.id,
+              title: item.course_name,
+              owner: item?.course_owner,
+              image:
+                item.course_image ||
+                'https://i.ibb.co/C1pVmtG/marketing-strategy-planning-strategy-concept-1.png',
+            };
+          })}
           renderItem={({item, index}) => (
             <CourseCard
               key={item.id}
@@ -44,6 +53,24 @@ const CourseScreen = ({navigation}) => {
               onPress={() => navigation.navigate('CourseDetailScreen', item)}
             />
           )}
+          ListEmptyComponent={
+            <View
+              style={{
+                height: scaleHeight(10),
+                width: scaleWidth(94),
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#fff',
+                borderRadius: scaleHeight(1),
+                marginTop: scaleHeight(1),
+              }}>
+              {courseLoading ? (
+                <ActivityIndicator color={PRIMARY_COLOR} />
+              ) : (
+                <Text fontSize={10}>Belum Ada Course</Text>
+              )}
+            </View>
+          }
         />
       </ScrollView>
     </MainLayout>

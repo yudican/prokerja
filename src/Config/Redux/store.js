@@ -7,6 +7,8 @@ import {authService} from './Services/authService';
 import userReducer from './Reducers/userReducer';
 import {visitService} from './Services/visitService';
 import {profileService} from './Services/profileService';
+import {courseService} from './Services/courseService';
+import {jobService} from './Services/jobService';
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +18,8 @@ export const store = configureStore({
     [pokemonService.reducerPath]: pokemonService.reducer,
     [authService.reducerPath]: authService.reducer,
     [visitService.reducerPath]: visitService.reducer,
+    [courseService.reducerPath]: courseService.reducer,
+    [jobService.reducerPath]: jobService.reducer,
     [profileService.reducerPath]: profileService.reducer,
   },
   middleware: getDefaultMiddleware =>
@@ -23,6 +27,8 @@ export const store = configureStore({
       pokemonService.middleware,
       authService.middleware,
       visitService.middleware,
+      courseService.middleware,
+      jobService.middleware,
       profileService.middleware,
     ),
 });

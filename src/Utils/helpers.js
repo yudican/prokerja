@@ -115,7 +115,6 @@ export const customFetchBaseQuery = baseUrl => {
     if (data?.message) {
       delete data.message;
     }
-    console.log(data, 'helper');
     return {data};
   };
 };

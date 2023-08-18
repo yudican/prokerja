@@ -187,7 +187,7 @@ const UpdateProfileScreen = ({navigation}) => {
               outline
               value={form.email}
             />
-            <InputText
+            {/* <InputText
               placeholder={'Masukkan No. Telepon'}
               Icon={Feather}
               icon={'smartphone'}
@@ -195,7 +195,7 @@ const UpdateProfileScreen = ({navigation}) => {
               error={validationErrors?.telepon}
               outline
               value={form.telepon}
-            />
+            /> */}
           </View>
           {/* button save container */}
           {!isKeyboardOpen && (

@@ -66,12 +66,12 @@ const updateProfileValidationSchema = yup.object().shape({
     .string()
     .email('Alamat email tidak valid')
     .required('Email wajib diisi'),
-  telepon: yup
-    .string()
-    .matches(/^\d+$/, 'Nomor telepon harus terdiri dari angka saja')
-    .min(10, 'Nomor telepon harus memiliki setidaknya 10 angka')
-    .max(15, 'Nomor telepon tidak boleh lebih dari 15 angka')
-    .required('Nomor telepon wajib diisi'),
+  // telepon: yup
+  //   .string()
+  //   .matches(/^\d+$/, 'Nomor telepon harus terdiri dari angka saja')
+  //   .min(10, 'Nomor telepon harus memiliki setidaknya 10 angka')
+  //   .max(15, 'Nomor telepon tidak boleh lebih dari 15 angka')
+  //   .required('Nomor telepon wajib diisi'),
 });
 
 const updatePasswordValidationSchema = yup.object().shape({

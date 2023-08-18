@@ -9,17 +9,17 @@ export const profileService = createApi({
     baseUrl: API_URL,
     prepareHeaders: async (headers, {getState}) => {
       const token = await AsyncStorage.getItem('token');
-      console.log(token, 'token');
-      console.log(getState(), 'getState()');
       headers.set('Authorization', `Bearer ${token}`);
-      // headers.set('Content-Type', `multipart/form-data`);
       return headers;
     },
   }),
   endpoints: builder => ({
+    notifications: builder.query({
+      query: params => `/profile/notification`,
+    }),
     updateProfile: builder.mutation({
       query: body => ({
-        url: '/profile/update/profile',
+        url: '/profile/update',
         method: 'POST',
         body,
         headers: {
@@ -40,5 +40,8 @@ export const profileService = createApi({
   }),
 });
 
-export const {useUpdateProfileMutation, useUpdatePasswordMutation} =
-  profileService;
+export const {
+  useNotificationsQuery,
+  useUpdateProfileMutation,
+  useUpdatePasswordMutation,
+} = profileService;

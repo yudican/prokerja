@@ -1,33 +1,42 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
+import Modal from 'react-native-modal';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import MainLayout from '../../Components/Layout/MainLayout';
 import MenuList from '../../Components/MenuList';
+import OnPress from '../../Components/OnPress';
 import Photo from '../../Components/ProfilePhoto';
 import Text from '../../Components/Text';
 import {setToken, setUserData} from '../../Config/Redux/Reducers/userReducer';
-import {useGetVisitQuery} from '../../Config/Redux/Services/visitService';
-import {PRIMARY_COLOR} from '../../Utils/contstans';
-import {scaleFont, scaleHeight, scaleWidth} from '../../Utils/helpers';
-import Modal from 'react-native-modal';
-import OnPress from '../../Components/OnPress';
+import {scaleHeight, scaleWidth} from '../../Utils/helpers';
 
 const AccountScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const [showModalLogout, setShowModalLogout] = useState(false);
   const {userData} = useSelector(state => state.user);
-  const {online, offlineData} = useSelector(state => state.general);
 
-  const isAdmin = userData?.role === 'admin';
-  const {data, isLoading} = useGetVisitQuery(
-    isAdmin ? `` : `?user=${userData?.id}`,
-  );
+  const loadUserData = async () => {
+    const user = await AsyncStorage.getItem('userData');
+    if (user) {
+      try {
+        const newUser = JSON.parse(user);
+        dispatch(setUserData(newUser));
+      } catch (error) {
+        dispatch(setUserData(user));
+      }
+    }
+  };
 
-  const visitTotal = data?.total || 0;
+  useEffect(() => {
+    if (!userData) {
+      loadUserData();
+    }
+  }, [userData]);
+
   return (
     <MainLayout>
       {/* user info */}

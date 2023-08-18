@@ -1,13 +1,44 @@
 import React from 'react';
 import MainLayout from '../../../Components/Layout/MainLayout';
-import {Image, ScrollView, View} from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  ScrollView,
+  View,
+} from 'react-native';
 import {scaleHeight, scaleWidth} from '../../../Utils/helpers';
 import Text from '../../../Components/Text';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import OnPress from '../../../Components/OnPress';
+import {
+  useGetCourseDetailQuery,
+  useGetCourseQuery,
+} from '../../../Config/Redux/Services/courseService';
+import {PRIMARY_COLOR} from '../../../Utils/contstans';
 
 const CourseDetailScreen = ({navigation, route}) => {
   const item = route.params;
+
+  const {data: courseData, isLoading: courseLoading} = useGetCourseQuery();
+  const {data: courseDetailData, isLoading: courseDetailLoading} =
+    useGetCourseDetailQuery(item.id);
+  const courseItems = courseLoading ? [] : courseData?.data || [];
+  const course = courseDetailLoading ? null : courseDetailData?.data || null;
+
+  if (courseLoading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <ActivityIndicator color={PRIMARY_COLOR} />
+      </View>
+    );
+  }
+
   return (
     <View style={{flex: 1}}>
       <View>
@@ -37,12 +68,7 @@ const CourseDetailScreen = ({navigation, route}) => {
           <Text color="#000" fontSize={12} type="SemiBold">
             {item.title}
           </Text>
-          <Text fontSize={10}>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro
-            soluta rerum exercitationem eius aut atque repellat tenetur ipsum
-            illum rem temporibus, voluptatem explicabo voluptas architecto
-            veniam doloremque cupiditate quis blanditiis.
-          </Text>
+          <Text fontSize={10}>{course?.course_description}</Text>
           <Text color="#000" fontSize={10} type="Medium">
             Created By {item.owner}
           </Text>
@@ -61,21 +87,58 @@ const CourseDetailScreen = ({navigation, route}) => {
           marginHorizontal: scaleWidth(2),
           marginTop: scaleHeight(1),
         }}>
-        <View style={{flexDirection: 'row', marginTop: scaleHeight(2)}}>
-          <Image
-            source={{uri: item.image}}
-            style={{
-              height: scaleHeight(7),
-              width: scaleWidth(20),
-              borderRadius: scaleHeight(1),
-            }}
-            resizeMode={'cover'}
-          />
-          <View style={{marginLeft: scaleWidth(2)}}>
-            <Text type="SemiBold">Welcome to the Photoshop Course </Text>
-            <Text fontSize={10}>{item.owner}</Text>
-          </View>
-        </View>
+        <FlatList
+          scrollEnabled={false}
+          data={courseItems
+            .filter(row => row.id !== item.id)
+            .map(item => {
+              return {
+                id: item.id,
+                title: item.course_name,
+                owner: item?.course_owner,
+                image:
+                  item.course_image ||
+                  'https://i.ibb.co/C1pVmtG/marketing-strategy-planning-strategy-concept-1.png',
+              };
+            })}
+          renderItem={({item, index}) => (
+            <View
+              style={{flexDirection: 'row', marginTop: scaleHeight(2)}}
+              key={item.id}>
+              <Image
+                source={{uri: item.image}}
+                style={{
+                  height: scaleHeight(7),
+                  width: scaleWidth(20),
+                  borderRadius: scaleHeight(1),
+                }}
+                resizeMode={'cover'}
+              />
+              <View style={{marginLeft: scaleWidth(2)}}>
+                <Text type="SemiBold">{item.title}</Text>
+                <Text fontSize={10}>{item.owner}</Text>
+              </View>
+            </View>
+          )}
+          ListEmptyComponent={
+            <View
+              style={{
+                height: scaleHeight(10),
+                width: scaleWidth(94),
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#fff',
+                borderRadius: scaleHeight(1),
+                marginTop: scaleHeight(1),
+              }}>
+              {courseLoading ? (
+                <ActivityIndicator color={PRIMARY_COLOR} />
+              ) : (
+                <Text fontSize={10}>Belum Ada Course</Text>
+              )}
+            </View>
+          }
+        />
       </ScrollView>
     </View>
   );

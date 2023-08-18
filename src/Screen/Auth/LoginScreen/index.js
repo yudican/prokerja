@@ -62,8 +62,6 @@ const LoginScreen = ({navigation}) => {
   };
 
   const handleSubmit = async () => {
-    dispatch(setToken('3432432432'));
-    return setItem('token', '3432432432');
     setLoading(true);
     try {
       // Validate form data using Yup
@@ -86,11 +84,11 @@ const LoginScreen = ({navigation}) => {
           text2: 'Login berhasil, selamat datang kembali',
         });
 
-        const {token} = data.tokens.access;
-        dispatch(setUserData(data.user));
+        const token = data.data.access_token;
+        dispatch(setUserData(data.data.user));
         dispatch(setToken(token));
         setItem('token', token);
-        setItem('userData', JSON.stringify(data.user));
+        setItem('userData', JSON.stringify(data.data.user));
 
         // return navigation.replace('HomeScreen');
       });
