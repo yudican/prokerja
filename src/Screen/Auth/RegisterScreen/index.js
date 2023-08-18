@@ -86,11 +86,11 @@ const RegisterScreen = ({navigation}) => {
           text2: 'Register berhasil, selamat datang',
         });
 
-        const {token} = data.tokens.access;
-        dispatch(setUserData(data.user));
+        const token = data.data.access_token;
+        dispatch(setUserData(data.data.user));
         dispatch(setToken(token));
         setItem('token', token);
-        setItem('userData', JSON.stringify(data.user));
+        setItem('userData', JSON.stringify(data.data.user));
 
         // return navigation.replace('HomeScreen');
       });

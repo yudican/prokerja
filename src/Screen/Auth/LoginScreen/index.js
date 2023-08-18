@@ -146,7 +146,7 @@ const LoginScreen = ({navigation}) => {
                 error={validationErrors?.password}
               />
 
-              <View style={{marginTop: scaleHeight(1)}}>
+              {/* <View style={{marginTop: scaleHeight(1)}}>
                 <Text
                   color={PRIMARY_COLOR}
                   type="Medium"
@@ -159,7 +159,7 @@ const LoginScreen = ({navigation}) => {
                   onPress={() => handleSubmit()}
                   loading={loading || isLoading}
                 />
-              </View>
+              </View> */}
             </View>
           </View>
         </View>
