@@ -146,20 +146,20 @@ const LoginScreen = ({navigation}) => {
                 error={validationErrors?.password}
               />
 
-              {/* <View style={{marginTop: scaleHeight(1)}}>
-                <Text
+              <View style={{marginTop: scaleHeight(1)}}>
+                {/* <Text
                   color={PRIMARY_COLOR}
                   type="Medium"
                   style={{textAlign: 'right', marginBottom: scaleHeight(1)}}
                   onPress={() => navigation.navigate('ForgotPasswordScreen')}>
                   Forgot Password?
-                </Text>
+                </Text> */}
                 <Button
                   title="Sign In"
                   onPress={() => handleSubmit()}
                   loading={loading || isLoading}
                 />
-              </View> */}
+              </View>
             </View>
           </View>
         </View>
