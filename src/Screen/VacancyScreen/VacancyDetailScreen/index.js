@@ -13,6 +13,7 @@ import {
 } from '../../../Config/Redux/Services/jobService';
 import {PRIMARY_COLOR} from '../../../Utils/contstans';
 import {scaleHeight, scaleWidth, truncateString} from '../../../Utils/helpers';
+import DocumentPicker from 'react-native-document-picker';
 
 const VacancyDetailScreen = ({navigation, route}) => {
   const item = route.params;
@@ -39,28 +40,24 @@ const VacancyDetailScreen = ({navigation, route}) => {
     );
   }
 
-  const selectImageFromLibrary = (field, title) => {
-    const options = {
-      title,
-      mediaType: 'photo', // Change to 'video' if you want to pick videos
-      quality: 1,
-      maxWidth: 500,
-      maxHeight: 500,
-    };
+  const selectImageFromLibrary = async (field, title = null) => {
+    try {
+      const result = await DocumentPicker.pick({
+        type: [DocumentPicker.types.pdf],
+      });
 
-    launchImageLibrary(options, response => {
-      if (!response.didCancel && !response.error) {
-        const file = response.assets[0];
-        setForm(formData => ({
-          ...formData,
-          [field]: {
-            uri: file.uri,
-            name: file.fileName,
-            type: file.type,
-          },
-        }));
-      }
-    });
+      console.log(result, 'result');
+      setForm(formData => ({
+        ...formData,
+        [field]: {
+          uri: result[0].uri,
+          name: result[0].name,
+          type: result[0].type,
+        },
+      }));
+    } catch (error) {
+      console.log('Error picking document:', error);
+    }
   };
 
   const handleApplyTest = () => {
@@ -70,6 +67,7 @@ const VacancyDetailScreen = ({navigation, route}) => {
     formData.append('biodata_file', form.biodata);
     formData.append('cv_file', form.cv);
     formData.append('surat_lamaran_file', form.lamaran);
+    console.log(formData, 'formData');
     apply(formData).then(({error, data}) => {
       if (error) {
         return Toast.show({
@@ -159,8 +157,8 @@ const VacancyDetailScreen = ({navigation, route}) => {
               onPress={() =>
                 selectImageFromLibrary('biodata', 'Pilih Biodata File')
               }>
-              {form?.biodata?.uri ? (
-                <Text>{truncateString(form?.biodata?.uri, 20)}</Text>
+              {form?.biodata?.name ? (
+                <Text>{truncateString(form?.biodata?.name, 20)}</Text>
               ) : (
                 <Octicons name={'file'} />
               )}
@@ -176,8 +174,8 @@ const VacancyDetailScreen = ({navigation, route}) => {
 
             <OnPress
               onPress={() => selectImageFromLibrary('cv', 'Pilih CV File')}>
-              {form?.cv?.uri ? (
-                <Text>{truncateString(form?.cv?.uri, 20)}</Text>
+              {form?.cv?.name ? (
+                <Text>{truncateString(form?.cv?.name, 20)}</Text>
               ) : (
                 <Octicons name={'file'} />
               )}
@@ -194,8 +192,8 @@ const VacancyDetailScreen = ({navigation, route}) => {
               onPress={() =>
                 selectImageFromLibrary('lamaran', 'Pilih Surat Lamaran File')
               }>
-              {form?.lamaran?.uri ? (
-                <Text>{truncateString(form?.lamaran?.uri, 20)}</Text>
+              {form?.lamaran?.name ? (
+                <Text>{truncateString(form?.lamaran?.name, 20)}</Text>
               ) : (
                 <Octicons name={'file'} />
               )}

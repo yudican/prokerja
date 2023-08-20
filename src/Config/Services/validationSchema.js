@@ -36,7 +36,7 @@ const registerValidationSchema = yup.object().shape({
     .string()
     .min(6, 'Kata Sandi Harus 6 karakter atau lebih')
     .required('Password Tidak Boleh Kosong'),
-  confirm_password: yup
+  password_confirmation: yup
     .string()
     .oneOf([yup.ref('password'), null], 'Konfirmasi kata sandi tidak sesuai')
     .required('Konfirmasi kata sandi Tidak Boleh Kosong'),
@@ -54,7 +54,7 @@ const resetPasswordValidationSchema = yup.object().shape({
     .string()
     .min(6, 'Kata Sandi Harus 6 karakter atau lebih')
     .required('Password Tidak Boleh Kosong'),
-  confirm_password: yup
+  password_confirmation: yup
     .string()
     .oneOf([yup.ref('password'), null], 'Konfirmasi kata sandi tidak sesuai')
     .required('Konfirmasi kata sandi Tidak Boleh Kosong'),
@@ -80,7 +80,7 @@ const updatePasswordValidationSchema = yup.object().shape({
     .string()
     .min(8, 'Kata Sandi Harus 6 karakter atau lebih')
     .required('Password Tidak Boleh Kosong'),
-  confirm_password: yup
+  password_confirmation: yup
     .string()
     .oneOf([yup.ref('password'), null], 'Konfirmasi kata sandi tidak sesuai')
     .required('Konfirmasi kata sandi Tidak Boleh Kosong'),

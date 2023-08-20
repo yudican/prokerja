@@ -126,3 +126,10 @@ export const removeDuplicates = arr => {
   });
   return Array.from(uniqueMap.values());
 };
+
+export const getVideoIdFromUrl = url => {
+  const match = url.match(
+    /(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/,
+  );
+  return match ? match[1] : null;
+};

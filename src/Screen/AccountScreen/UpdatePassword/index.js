@@ -17,7 +17,7 @@ const UpdatePassword = ({navigation}) => {
   const [form, setForm] = useState({
     old_password: null,
     password: null,
-    confirm_password: null,
+    password_confirmation: null,
   });
 
   const [updatePassword, {isLoading}] = useUpdatePasswordMutation();
@@ -54,7 +54,6 @@ const UpdatePassword = ({navigation}) => {
     try {
       // Validate form data using Yup
       await updatePasswordValidationSchema.validate(form, {abortEarly: false});
-      delete form.confirm_password;
       // Submit the form or perform the desired action here
       updatePassword(form).then(({data, error}) => {
         if (error) {
@@ -132,10 +131,13 @@ const UpdatePassword = ({navigation}) => {
               placeholder={' Konfirmasi Kata Sandi'}
               type={'password'}
               icon={'lock'}
-              onChangeText={confirm_password =>
-                handleInputChange('confirm_password', confirm_password)
+              onChangeText={password_confirmation =>
+                handleInputChange(
+                  'password_confirmation',
+                  password_confirmation,
+                )
               }
-              error={validationErrors?.confirm_password}
+              error={validationErrors?.password_confirmation}
               outline
             />
           </View>

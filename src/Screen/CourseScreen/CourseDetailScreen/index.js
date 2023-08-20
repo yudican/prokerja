@@ -1,5 +1,4 @@
-import React from 'react';
-import MainLayout from '../../../Components/Layout/MainLayout';
+import React, {useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -7,18 +6,24 @@ import {
   ScrollView,
   View,
 } from 'react-native';
-import {scaleHeight, scaleWidth} from '../../../Utils/helpers';
-import Text from '../../../Components/Text';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import YoutubePlayer from 'react-native-youtube-iframe';
 import OnPress from '../../../Components/OnPress';
+import Text from '../../../Components/Text';
 import {
   useGetCourseDetailQuery,
   useGetCourseQuery,
 } from '../../../Config/Redux/Services/courseService';
 import {PRIMARY_COLOR} from '../../../Utils/contstans';
+import {
+  getVideoIdFromUrl,
+  scaleHeight,
+  scaleWidth,
+} from '../../../Utils/helpers';
 
 const CourseDetailScreen = ({navigation, route}) => {
   const item = route.params;
+  const [playing, setPlaying] = useState(false);
 
   const {data: courseData, isLoading: courseLoading} = useGetCourseQuery();
   const {data: courseDetailData, isLoading: courseDetailLoading} =
@@ -56,7 +61,11 @@ const CourseDetailScreen = ({navigation, route}) => {
           }}>
           <Ionicons name="chevron-back-sharp" color={'#000'} />
         </OnPress>
-        <Image source={{uri: item.image}} style={{height: scaleHeight(30)}} />
+        <YoutubePlayer
+          height={scaleHeight(30)}
+          play={playing}
+          videoId={getVideoIdFromUrl(course?.course_url || '') || 'YRn25jiJ1_c'}
+        />
         <View
           style={{
             marginHorizontal: scaleWidth(2),

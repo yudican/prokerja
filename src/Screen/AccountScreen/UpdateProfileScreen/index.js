@@ -110,15 +110,15 @@ const UpdateProfileScreen = ({navigation}) => {
           return setLoading(false);
         }
 
-        console.log(data, 'data');
+        console.log(data.data, 'data');
         Toast.show({
           type: 'success',
           text1: 'Informasi',
           text2: 'Ubah Profil berhasil',
         });
 
-        dispatch(setUserData(data));
-        setItem('userData', JSON.stringify(data));
+        dispatch(setUserData(data.data));
+        setItem('userData', JSON.stringify(data.data));
 
         setLoading(false);
         return navigation.goBack();

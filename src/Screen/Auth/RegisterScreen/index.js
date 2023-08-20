@@ -31,7 +31,7 @@ const RegisterScreen = ({navigation}) => {
     name: null,
     email: null,
     password: null,
-    confirm_password: null,
+    password_confirmation: null,
   });
 
   const [register, {isLoading}] = useRegisterMutation();
@@ -68,11 +68,10 @@ const RegisterScreen = ({navigation}) => {
     try {
       // Validate form data using Yup
       await registerValidationSchema.validate(form, {abortEarly: false});
-      delete form.confirm_password;
       // Submit the form or perform the desired action here
       register(form).then(({data, error}) => {
         if (error) {
-          console.log(error, 'error');
+          console.log(JSON.stringify(error), 'error');
           Toast.show({
             type: 'error',
             text1: 'Register Gagal',
@@ -158,10 +157,13 @@ const RegisterScreen = ({navigation}) => {
                 placeholder={' Confirm Password'}
                 type={'password'}
                 icon={'lock'}
-                onChangeText={confirm_password =>
-                  handleInputChange('confirm_password', confirm_password)
+                onChangeText={password_confirmation =>
+                  handleInputChange(
+                    'password_confirmation',
+                    password_confirmation,
+                  )
                 }
-                error={validationErrors?.confirm_password}
+                error={validationErrors?.password_confirmation}
                 outline
               />
 

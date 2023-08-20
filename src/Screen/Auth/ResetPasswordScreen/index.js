@@ -25,7 +25,7 @@ const ResetPasswordScreen = ({navigation, route}) => {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     password: null,
-    confirm_password: null,
+    password_confirmation: null,
   });
 
   const {token} = route.params;
@@ -64,7 +64,7 @@ const ResetPasswordScreen = ({navigation, route}) => {
     try {
       // Validate form data using Yup
       await resetPasswordValidationSchema.validate(form, {abortEarly: false});
-      delete form.confirm_password;
+      delete form.password_confirmation;
       // Submit the form or perform the desired action here
       resetPassword({...form, token}).then(({data, error}) => {
         if (error) {
@@ -131,10 +131,13 @@ const ResetPasswordScreen = ({navigation, route}) => {
                 placeholder={'Masukkan Konfirmasi Kata Sandi'}
                 type={'password'}
                 icon={'lock'}
-                onChangeText={confirm_password =>
-                  handleInputChange('confirm_password', confirm_password)
+                onChangeText={password_confirmation =>
+                  handleInputChange(
+                    'password_confirmation',
+                    password_confirmation,
+                  )
                 }
-                error={validationErrors?.confirm_password}
+                error={validationErrors?.password_confirmation}
                 outline
               />
 
